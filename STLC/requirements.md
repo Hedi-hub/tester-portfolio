@@ -34,11 +34,11 @@ The webshop has the following basic functionalities:
 
 **Detailed Requirement** :
 
-- Users can rate products using a 1 to 5-star system, with no 0 or above 5
+- Users should rate products using a 1 to 5-star system, with no 0 or above 5
     ratings allowed. A star rating is required to submit a review, but written
     feedback is optional. Users can edit or delete their reviews. Reviews must be
     10 - 500 characters long and pass a profanity filter. Duplicate reviews should be
-    detected, notifying users or replacing the previous review.
+    detected and notified users if they would like to replace the previous review.
 
 
 ## 2. Age Verification for Alcoholic Products
@@ -63,12 +63,10 @@ The webshop has the following basic functionalities:
 
 **Detailed Requirement** :
 
-- The system must support multiple date formats (e.g., DD/MM/YYYY and
-    MM/DD/YYYY) and reject invalid ages (e.g., letters, negative numbers, or
-    future birthdates). Users cannot skip age verification to access alcoholic
-    products. The system should clarify whether age data is stored in cookies or if
-    verification is required on each visit. The modal must be fully responsive and
-    accessible on desktop, mobile and tablet devices.
+- Users must be able to input in a age place holder with the date format of DD/MM/YYYY. 
+    Users cannot skip age verification to access alcoholic products. Users's date of 
+    birth should be stored in cookies to avoid repetition. The modal must fully 
+    responsive and accessible on desktop, mobile and tablet devices.
 
 ## 3. Shipping Cost Changes
 
@@ -89,8 +87,8 @@ The webshop has the following basic functionalities:
 
 **Detailed Requirement** :
 
-- The system must clearly define the spending amount for free shipping (e.g.,
-    before or after tax). Shipping fees should vary by region if applicable. If the
+- Users should get free shipping if the total amount of shopping card is over 50€. 
+    Shipping fees should vary by region if applicable. If the
     order total changes (e.g., items removed), the shipping cost must update
     dynamically. Users must be notified of shipping cost changes on the checkout
     page.
