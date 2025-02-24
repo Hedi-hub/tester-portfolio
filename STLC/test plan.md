@@ -24,7 +24,7 @@ The objective of testing is to validate the functionality, usability, and securi
 ### Product Functionality
 - **Existing Features:** Product search, browsing, checkout, and payment.
 - **New Features:**
-  1. **Product Rating System** – Users can rate products using a 5-star system and add feedback.
+  1. **Product Rating System** – Users can rate products using a 5-star system, but only after purchasing them.
   2. **Age Verification for Alcoholic Products** – Users must confirm they are **18+** to access alcoholic products.
   3. **Shipping Cost Changes** – Free shipping for orders above a specific amount; applicable shipping fees for lower amounts.
 
@@ -36,13 +36,14 @@ The objective of testing is to validate the functionality, usability, and securi
 
 #### **In Scope:**
 - Functional testing of the new features.
-- UI validation for new UI elements.
-- API testing for age verification and rating submissions.
-- Performance testing of rating and checkout process.
+- UI validation for proper error messages when users attempt to rate without purchasing.
+- Verification of the age verification modal and restrictions for underage users.
+- Testing of shipping cost calculations and display at checkout.
 
 #### **Out of Scope:**
 - Internal retailer product management systems.
 - Non-core third-party integrations.
+- Ratings by guest (unregistered) users, since they cannot rate products.
 
 ### Type of Testing
 - Functional Testing

@@ -1,67 +1,70 @@
-# Test Case Design
+# Market Mate - Test Case Design
 
-## 1. Product Rating System
-
-**Test Design Techniques:** Boundary Value Analysis (BVA), Equivalence Partitioning (EP), Error Guessing
-
-### Test Cases:
-
-- **Boundary Value Analysis:**
-  - **Test Case:** Verify rating submission with valid stars (1-5).
-    - **Input:** Select 5 stars and submit.
-    - **Expected Outcome:** Rating is recorded successfully.
-
-- **Equivalence Partitioning:**
-  - **Test Case:** Verify rating submission without stars.
-    - **Input:** Submit feedback without selecting a star rating.
-    - **Expected Outcome:** Error message "Please select a star rating."
-
-- **Error Guessing:**
-  - **Test Case:** Verify review submission with restricted words.
-    - **Input:** Enter profanity in review text.
-    - **Expected Outcome:** Warning message "Inappropriate words are not allowed."
-
-## 2. Age Verification for Alcoholic Products
+## **1. Product Rating System**
 
 **Test Design Techniques:** Equivalence Partitioning (EP), Error Guessing
 
-### Test Cases:
+- **Equivalence Partitioning:**
+  - **Test Case:** Verify that only registered users who have purchased a product can submit a rating.
+    - **Input:** Logged-in user who has not purchased a product attempts to rate.
+    - **Expected Outcome:** The rating option is disabled, and a message is displayed:  
+      _"Only customers who purchased this product can submit a review."_
+
+  - **Test Case:** Verify rating submission with valid stars (1-5).
+    - **Input:** A user who has purchased the product selects 5 stars and submits.
+    - **Expected Outcome:** Rating is recorded successfully.
+
+- **Error Guessing:**
+  - **Test Case:** Verify review submission with restricted words.
+    - **Input:** Enter profanity in the review text.
+    - **Expected Outcome:** Warning message: _"Inappropriate words are not allowed."_
+
+---
+
+## **2. Age Verification for Alcoholic Products**
+
+**Test Design Techniques:** Equivalence Partitioning (EP), Error Guessing
 
 - **Equivalence Partitioning:**
-  - **Test Case:** Verify access restriction for underage users.
-    - **Input:** Enter birthdate indicating user is 17 years old.
-    - **Expected Outcome:** Access denied with a message "You must be 18+ to access this section."
+  - **Test Case:** Verify system correctly denies access to alcoholic products if the user's account is underage.
+    - **Input:** Log in with an account where the registered user is 17 years old.
+    - **Expected Outcome:** Access denied with a message:  
+      _"You must be 18+ to access this section."_
 
-  - **Test Case:** Verify access granted for users 18+.
-    - **Input:** Enter birthdate indicating user is 20 years old.
+  - **Test Case:** Verify system grants access to alcoholic products if the user is 18+.
+    - **Input:** Log in with an account where the registered user is 20 years old.
     - **Expected Outcome:** Access granted to alcoholic products.
 
 - **Error Guessing:**
-  - **Test Case:** Verify system behavior when birthdate field is left empty.
-    - **Input:** Leave birthdate blank.
-    - **Expected Outcome:** Error message "Birthdate is required."
+  - **Test Case:** Verify system behavior for users with no recorded birthdate.
+    - **Input:** Log in with an account that does not have birthdate information.
+    - **Expected Outcome:** System prompts the user to enter a birthdate before accessing alcoholic products.
 
-## 3. Shipping Cost Changes
+---
+
+## **3. Shipping Cost Changes**
 
 **Test Design Techniques:** Boundary Value Analysis (BVA), Equivalence Partitioning (EP), Use Case Testing
 
-### Test Cases:
-
 - **Boundary Value Analysis:**
-  - **Test Case:** Verify free shipping applies above the limit.
-    - **Input:** Order total is €51 (assuming free shipping starts at €50).
-    - **Expected Outcome:** Shipping cost = €0.
+  - **Test Case:** Verify free shipping applies correctly based on the defined threshold.
+    - **Input:** Test orders with different values: **€19.99, €20, and €45.70**.
+    - **Expected Outcome:**
+      - **€19.99:** Shipping cost is displayed.
+      - **€20 or above:** Free shipping is clearly indicated.
 
-  - **Test Case:** Verify shipping fee applies below the limit.
-    - **Input:** Order total is €49.
-    - **Expected Outcome:** Shipping cost = applicable fee (The system should charge the correct shipping fee based on the order amount).
+  - **Test Case:** Verify shipping fee applies correctly for orders below the threshold.
+    - **Input:** Order total is **€19.99**.
+    - **Expected Outcome:** Shipping cost is displayed and charged appropriately.
 
 - **Equivalence Partitioning:**
   - **Test Case:** Verify system recalculates shipping if an item is removed.
-    - **Input:** Remove an item reducing total from €55 to €45.
+    - **Input:** Remove an item reducing total from **€55 to €45**.
     - **Expected Outcome:** Shipping cost recalculated correctly.
 
 - **Use Case Testing:**
-  - **Test Case:** Verify shipping cost is displayed on checkout page.
-    - **Input:** Proceed to checkout with an order total of €40.
-    - **Expected Outcome:** Shipping fee is clearly displayed before payment.
+  - **Test Case:** Verify the correct display of shipping costs on the checkout page.
+    - **Input:** Proceed to checkout with different order totals (**€19.99, €20, and €45.70**).
+    - **Expected Outcome:**
+      - Orders below **€20** should show a shipping fee.
+      - Orders **€20 and above** should display _"Free Shipping"_ explicitly instead of omitting the cost.
