@@ -13,11 +13,11 @@ The test execution documentation follows the structure outlined in the **[GitHub
 
 | Step # | Action | Expected Outcome | OK/NOK | URL | Link to Issue |
 |--------|--------|------------------|--------|-----|--------------|
-| 1 | Log in with valid credentials. | User is successfully logged in. | ✅ OK | `/login` | |
-| 2 | Navigate to a product page (e.g., Celery) that has not been purchased. | Rating option is disabled with a message: _"Only customers who purchased this product can submit a review."_ | ✅ OK | `/product/celery` | |
-| 3 | Purchase the product (e.g., Celery). | Purchase is completed successfully. | ✅ OK | `/checkout` | |
-| 4 | Return to the same product page. | Rating option is now enabled. | ❌ NOK | `/product/celery` | **Issue #1** |
-| 5 | Submit a rating (e.g., 5 stars). | Rating is recorded successfully. | ❌ NOK | `/product/celery` | **Issue #1** |
+| 1 | Log in with valid credentials. | User is successfully logged in. | OK | `/login` | |
+| 2 | Navigate to a product page (e.g., Celery) that has not been purchased. | Rating option is disabled with a message: _"Only customers who purchased this product can submit a review."_ | OK | `/product/celery` | |
+| 3 | Purchase the product (e.g., Celery). | Purchase is completed successfully. | OK | `/checkout` | |
+| 4 | Return to the same product page. | Rating option is now enabled. | NOK | `/product/celery` | **Issue #1** |
+| 5 | Submit a rating (e.g., 5 stars). | Rating is recorded successfully. | NOK | `/product/celery` | **Issue #1** |
 
 ---
 
@@ -27,12 +27,12 @@ The test execution documentation follows the structure outlined in the **[GitHub
 
 | Step # | Action | Expected Outcome | OK/NOK | URL | Link to Issue |
 |--------|--------|------------------|--------|-----|--------------|
-| 1 | Log in with an account registered as 17 years old. | User is successfully logged in. | ✅ OK | `/login` | |
-| 2 | Attempt to access an alcoholic product page. | Access is denied with a message: _"You must be 18+ to access this section."_ | ❌ NOK | `/product/wine` | **Issue #2** |
-| 3 | Log in with an account registered as 20 years old. | User is successfully logged in. | ✅ OK | `/login` | |
-| 4 | Access the same alcoholic product page. | Access is granted to the alcoholic product. | ✅ OK | `/product/wine` | |
-| 5 | Log in with an account that has no birthdate recorded. | User is successfully logged in. | ✅ OK | `/login` | |
-| 6 | Attempt to access an alcoholic product page. | System prompts the user to enter their birthdate before accessing alcoholic products. | ❌ NOK | `/product/wine` | **Issue #3** |
+| 1 | Log in with an account registered as 17 years old. | User is successfully logged in. | OK | `/login` | |
+| 2 | Attempt to access an alcoholic product page. | Access is denied with a message: _"You must be 18+ to access this section."_ | NOK | `/product/wine` | **Issue #2** |
+| 3 | Log in with an account registered as 20 years old. | User is successfully logged in. | OK | `/login` | |
+| 4 | Access the same alcoholic product page. | Access is granted to the alcoholic product. | OK | `/product/wine` | |
+| 5 | Log in with an account that has no birthdate recorded. | User is successfully logged in. | OK | `/login` | |
+| 6 | Attempt to access an alcoholic product page. | System prompts the user to enter their birthdate before accessing alcoholic products. | NOK | `/product/wine` | **Issue #3** |
 
 ---
 
@@ -42,10 +42,10 @@ The test execution documentation follows the structure outlined in the **[GitHub
 
 | Step # | Action | Expected Outcome | OK/NOK | URL | Link to Issue |
 |--------|--------|------------------|--------|-----|--------------|
-| 1 | Add items totaling €19.99 to the cart. | Shipping fee is applied. | ✅ OK | `/cart` | |
-| 2 | Increase the order total to €20.00. | Free shipping is applied. | ✅ OK | `/cart` | |
-| 3 | Proceed to checkout with an order total of €19.99. | Shipping fee is displayed correctly before payment. | ✅ OK | `/checkout` | |
-| 4 | Proceed to checkout with an order total of €20.00. | _"Free Shipping"_ is explicitly displayed before payment. | ✅ OK | `/checkout` | |
-| 5 | Remove an item reducing the total from €55 to €45. | Shipping cost is recalculated correctly based on the new total. | ✅ OK | `/cart` | |
+| 1 | Add items totaling €19.99 to the cart. | Shipping fee is applied. | OK | `/cart` | |
+| 2 | Increase the order total to €20.00. | Free shipping is applied. | OK | `/cart` | |
+| 3 | Proceed to checkout with an order total of €19.99. | Shipping fee is displayed correctly before payment. | OK | `/checkout` | |
+| 4 | Proceed to checkout with an order total of €20.00. | _"Free Shipping"_ is explicitly displayed before payment. | OK | `/checkout` | |
+| 5 | Remove an item reducing the total from €55 to €45. | Shipping cost is recalculated correctly based on the new total. | OK | `/cart` | |
 
 ---
