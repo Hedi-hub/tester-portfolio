@@ -12,12 +12,11 @@ The test execution documentation follows the structure outlined in the **[GitHub
 **As a registered user of GroceryMate, I should be able to submit a rating only for products I have purchased.**
 
 | Step # | Action | Expected Outcome | OK/NOK | URL | Link to Issue |
-|--------|--------|------------------|--------|-----|--------------|
-| 1 | Log in with valid credentials. | User is successfully logged in. | OK | `/login` | |
-| 2 | Navigate to a product page (e.g., Celery) that has not been purchased. | Rating option is disabled with a message: _"Only customers who purchased this product can submit a review."_ | OK | `/product/celery` | |
-| 3 | Purchase the product (e.g., Celery). | Purchase is completed successfully. | OK | `/checkout` | |
-| 4 | Return to the same product page. | Rating option is now enabled. | NOK | `/product/celery` | **Issue #1** |
-| 5 | Submit a rating (e.g., 5 stars). | Rating is recorded successfully. | NOK | `/product/celery` | **Issue #1** |
+|--------|--------|-----------------|--------|-----|--------------|
+| 1 | Log in with valid credentials. | User is successfully logged in. | OK | /login | |
+| 2 | Purchase the product (e.g., Celery). | Purchase is completed successfully. | OK | /checkout | |
+| 3 | Return to the same product page. | Rating option is enabled. | OK | /product/celery | |
+| 4 | Submit a rating (e.g., 5 stars). | The rating system allows full selection of 5 stars. | NOK | /product/celery | Issue #1 |
 
 ---
 

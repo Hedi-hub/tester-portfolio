@@ -12,7 +12,7 @@
 
   - **Test Case:** Verify rating submission with valid stars (1-5).
     - **Input:** A user who has purchased the product selects 5 stars and submits.
-    - **Expected Outcome:** Rating is recorded successfully.
+    - **Expected Outcome:** The full 5-star rating should be recorded successfully.
 
 - **Error Guessing:**
   - **Test Case:** Verify review submission with restricted words.
