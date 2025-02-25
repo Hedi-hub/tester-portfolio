@@ -41,9 +41,4 @@
 | 4 | Proceed to checkout with an order total of €20.00. | _"Free Shipping"_ is explicitly displayed before payment. | OK | `/checkout` | |
 | 5 | Remove an item reducing the total from €55 to €45. | Shipping cost is recalculated correctly based on the new total. | OK | `/cart` | |
 
-![Screenshot 2025-02-25 at 15.24.37.png](..%2F..%2F..%2F..%2FDocuments%2FScreenshot%202025-02-25%20at%2015.24.37.png)
-![Screenshot 2025-02-25 at 15.25.01.png](..%2F..%2F..%2F..%2FDocuments%2FScreenshot%202025-02-25%20at%2015.25.01.png)
-![Screenshot 2025-02-25 at 15.32.10.png](..%2F..%2F..%2F..%2FDocuments%2FScreenshot%202025-02-25%20at%2015.32.10.png)
-![Screenshot 2025-02-25 at 15.26.39.png](..%2F..%2F..%2F..%2FDocuments%2FScreenshot%202025-02-25%20at%2015.26.39.png)
-
 ---
