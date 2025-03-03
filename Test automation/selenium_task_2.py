@@ -14,7 +14,6 @@ def driver():
     driver.quit()
 
 
-# Updated with all users
 @pytest.mark.parametrize("username,password,pass_test", [
     ("standard_user", "secret_sauce", True),
     ("locked_out_user", "secret_sauce", False),
@@ -28,7 +27,7 @@ def test_login(driver, username, password, pass_test):
     driver.find_element(By.ID, "password").send_keys(password)
     driver.find_element(By.ID, "login-button").click()
 
-    # Verify login using WebDriverWait for stability
+    # Verify login
     try:
         WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.CLASS_NAME, "title"))
