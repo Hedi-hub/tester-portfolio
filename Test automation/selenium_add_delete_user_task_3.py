@@ -1,3 +1,5 @@
+import time
+
 import pytest
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -9,7 +11,7 @@ from selenium.webdriver.support import expected_conditions as EC
 def driver():
     driver = webdriver.Chrome()
     driver.get("http://automationexercise.com")
-    #driver.maximize_window()
+    driver.maximize_window()
     yield driver
     driver.quit()
 
@@ -18,30 +20,29 @@ def test_user_registration(driver):
     wait = WebDriverWait(driver, 30)
 
     # Click on "Signup/Login"
-    wait.until(EC.element_to_be_clickable((By.XPATH, "//a[contains(text(), 'Signup')]"))).click()
+    # wait.until(EC.element_to_be_clickable((By.XPATH, "//a[contains(text(), 'Signup')]"))).click()
 
     # Handle Cookie Popup
     try:
         cookie_button = WebDriverWait(driver, 5).until(
-            EC.element_to_be_clickable((By.XPATH, "//button[contains(text(), 'Consent')]"))
-        )
+            EC.element_to_be_clickable((By.XPATH, "//button[@class='fc-button fc-cta-consent fc-primary-button']")))
         cookie_button.click()
         print("Cookie consent accepted.")
     except:
         print("No cookie popup found, continuing...")
 
         # Scroll and click "Signup/Login"
-        signup_button = wait.until(EC.element_to_be_clickable((By.XPATH, "//a[@href='/login']")))
-        driver.execute_script("arguments[0].scrollIntoView();", signup_button)
-        signup_button.click()
-        print("Clicked 'Signup/Login' button.")
+    signup_button = wait.until(EC.element_to_be_clickable((By.XPATH, "//a[@href='/login']")))
+    driver.execute_script("arguments[0].scrollIntoView();", signup_button)
+    signup_button.click()
+    print("Clicked 'Signup/Login' button.")
 
     # Verify "New User Signup!" is visible
     assert "New User Signup!" in driver.page_source
 
     # Enter name and email
     wait.until(EC.presence_of_element_located((By.NAME, "name"))).send_keys("Hello World")
-    wait.until(EC.presence_of_element_located((By.XPATH, "//input[@data-qa='signup-email']"))).send_keys("helloworld@example.com")
+    wait.until(EC.presence_of_element_located((By.XPATH, "//input[@data-qa='signup-email']"))).send_keys("helloworld2022@example.com")
     wait.until(EC.element_to_be_clickable((By.XPATH, "//button[@data-qa='signup-button']"))).click()
 
     # Verify "ENTER ACCOUNT INFORMATION" is visible
@@ -49,11 +50,11 @@ def test_user_registration(driver):
 
     # Fill in account details
     wait.until(EC.presence_of_element_located((By.ID, "password"))).send_keys("TestPass123")
-    wait.until(EC.element_to_be_clickable((By.ID, "uniform-newsletter"))).click()
-    wait.until(EC.element_to_be_clickable((By.ID, "uniform-optin"))).click()
+    wait.until(EC.element_to_be_clickable((By.ID, "newsletter"))).click()
+    wait.until(EC.element_to_be_clickable((By.ID, "optin"))).click()
 
     # Verify "ADDRESS INFORMATION" is visible
-    assert driver.find_element(By.XPATH, "//h2[contains(text(), 'Address Information')]").is_displayed()
+    assert driver.find_element(By.XPATH, "//b[contains(text(), 'Address Information')]").is_displayed()
 
     # Fill in personal details
     driver.find_element(By.ID, "first_name").send_keys("Hello ")
@@ -74,7 +75,7 @@ def test_user_registration(driver):
     wait.until(EC.element_to_be_clickable((By.XPATH, "//a[@data-qa='continue-button']"))).click()
 
     # Delete the account
-    wait.until(EC.element_to_be_clickable((By.XPATH, "//a[text()='Delete Account']"))).click()
+    wait.until(EC.element_to_be_clickable((By.XPATH, "//a[@href='/delete_account']"))).click()
 
     # Verify "ACCOUNT DELETED!" is visible
     assert "Account Deleted!" in driver.page_source
