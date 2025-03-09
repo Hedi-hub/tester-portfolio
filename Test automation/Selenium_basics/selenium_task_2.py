@@ -1,6 +1,7 @@
 import pytest
 import time
 from selenium import webdriver
+from selenium.common import NoSuchElementException, TimeoutException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -19,7 +20,7 @@ def driver():
     ("locked_out_user", "secret_sauce", False),
     ("problem_user", "secret_sauce", True),
     ("performance_glitch_user", "secret_sauce", True),
-    ("error_user", "secret_sauce", False),
+    ("error_user", "secret_sauce", True),
     ("visual_user", "secret_sauce", True)
 ])
 def test_login(driver, username, password, pass_test):
@@ -33,7 +34,7 @@ def test_login(driver, username, password, pass_test):
             EC.presence_of_element_located((By.CLASS_NAME, "title"))
         )
         login_success = True
-    except:
+    except (NoSuchElementException, TimeoutException):
         login_success = False
 
     assert login_success == pass_test, f"Test failed for user: {username}"

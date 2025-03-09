@@ -4,11 +4,9 @@
 > //h1\[@id=\'mainTitle\'\]
 >
 > 2\. XPath to select the \"About Us\" navigational link
-> //a\[text()=\'About Us\'\]\
-> //a\[@href='#about'\]
+> //a\[text()=\'About Us\'\]
 >
 > 3\. XPath to select the \"Graphic Design\" dropdown link
-> //ul\[@class=\'dropdown\'\]//a\[text()=\'Graphic Design\'\]
 > //a\[@href=\'#graphicdesign\'\]
 >
 > 4\. XPath to select the team members name \"Jane Smith\"
@@ -35,8 +33,6 @@
 >
 > (//h4)\[1\]
 >
-> (//div\[@class=\'team\'\]//h4)\[1\]
->
 > 11\. XPath to select the description of the second service item
 >
 > (//div\[@class=\'service-item\'\]/p)\[2\]
@@ -57,4 +53,3 @@
 > 15\. XPath to locate the \"Send Message\" button in the contact form
 >
 > //input\[@type=\'submit\' and \@value=\'Send Message\'\]
-> //form\[@id=\'contactForm\'\]//input\[@type=\'submit\'\]
