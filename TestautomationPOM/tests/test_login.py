@@ -1,5 +1,7 @@
 import pytest
 from TestautomationPOM.pages.login_page import LoginPage
+from TestautomationPOM.utils.constant import BASE_URL
+
 
 @pytest.fixture
 def login_page(driver):
