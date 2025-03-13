@@ -1,4 +1,5 @@
 # pages/base_page.py
+import os
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
@@ -36,3 +37,18 @@ class BasePage:
         return WebDriverWait(self.driver, self.timeout).until(
             EC.url_to_be(url_to_be)
         )
+
+    def save_screenshot(self, filename="debug_screenshot.png"):
+        """ Save a screenshot to the 'screenshots' folder for debugging """
+        screenshot_folder = "TestautomationPOM/screenshots"
+        os.makedirs(screenshot_folder, exist_ok=True)  # Ensure folder exists
+
+        screenshot_path = os.path.join(screenshot_folder, filename)
+        success = self.driver.save_screenshot(screenshot_path)
+
+        if success:
+            print(f"Screenshot saved: {screenshot_path}")
+        else:
+            print("Failed to save screenshot!")
+
+        return success
