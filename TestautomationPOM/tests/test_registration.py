@@ -5,6 +5,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from TestautomationPOM.pages.registration_page import RegistrationPage
 from TestautomationPOM.utils.constants import BASE_URL
 
+
 def test_registration_valid_data(driver):
     """ Test successful registration with valid credentials """
     driver.get(BASE_URL)  # Open the login page
