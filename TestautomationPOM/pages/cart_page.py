@@ -48,9 +48,4 @@ class CartPage(BasePage):
         except WebDriverException:
             print("Error: Unable to click on remove item button.")
 
-    def proceed_to_checkout(self):
-        """ Click on the checkout button """
-        try:
-            self.click(self.CHECKOUT_BUTTON)
-        except WebDriverException:
-            print("Error: Unable to click on checkout button.")
+
