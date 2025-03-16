@@ -3,6 +3,7 @@ import os
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
+from selenium.common.exceptions import TimeoutException, NoSuchElementException
 
 
 class BasePage:
@@ -52,3 +53,13 @@ class BasePage:
             print("Failed to save screenshot!")
 
         return success
+
+    def get_element_text(self, locator):
+        """Retrieve text from a web element."""
+        try:
+            element = WebDriverWait(self.driver, self.timeout).until(
+                EC.presence_of_element_located(locator)
+            )
+            return element.text
+        except (TimeoutException, NoSuchElementException):
+            return None  # Or raise an error if needed
