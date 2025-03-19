@@ -9,13 +9,16 @@ def test_add_item_to_cart(driver):
     store_page = StorePage(driver)
     store_page.go_to_shop()
 
-    store_page.select_product("Oranges")  # Now navigates through pages to find product
+    # Take a screenshot after navigating to the shop page
+    driver.save_screenshot("shop_page_loaded2.png")
+
+    store_page.select_product("Gala Apples")  # Now navigates through pages to find product
     store_page.set_quantity(3)
     store_page.add_to_cart()
 
     store_page.open_cart()
 
-    assert store_page.is_product_in_cart("Oranges"), "Item was not added to the cart."
+    assert store_page.is_product_in_cart("Gala Apples"), "Item was not added to the cart."
 
 
 def test_update_cart_quantity(driver):
@@ -24,14 +27,14 @@ def test_update_cart_quantity(driver):
     store_page = StorePage(driver)
     store_page.go_to_shop()
 
-    store_page.select_product("Oranges")
+    store_page.select_product("Gala Apples")
     store_page.set_quantity(2)
     store_page.add_to_cart()
 
     store_page.open_cart()
-    store_page.update_product_quantity("Oranges", 5)
+    store_page.update_product_quantity("Gala Apples", 5)
 
-    assert store_page.get_product_quantity("Oranges") == 5, "Cart quantity update failed."
+    assert store_page.get_product_quantity("Gala Apples") == 5, "Cart quantity update failed."
 
 
 def test_remove_item_from_cart(driver):
@@ -40,14 +43,14 @@ def test_remove_item_from_cart(driver):
     store_page = StorePage(driver)
     store_page.go_to_shop()
 
-    store_page.select_product("Oranges")
+    store_page.select_product("Gala Apples")
     store_page.set_quantity(1)
     store_page.add_to_cart()
 
     store_page.open_cart()
-    store_page.remove_product("Oranges")
+    store_page.remove_product("Gala Apples")
 
-    assert not store_page.is_product_in_cart("Oranges"), "Item was not removed from the cart."
+    assert not store_page.is_product_in_cart("Gala Apples"), "Item was not removed from the cart."
 
 
 def test_navigate_to_shop_with_age_verification(driver):

@@ -55,12 +55,12 @@ class StorePage(BasePage):
             WebDriverWait(self.driver, 5).until(
                 EC.presence_of_element_located(self.PRODUCT_CARD)  # Wait for new products
             )
-            print(f"✅ Successfully navigated to page {page_number}")
+            print(f"Successfully navigated to page {page_number}")
 
         except TimeoutException:
-            print(f"❌ Page {page_number} did not load in time.")
+            print(f"Page {page_number} did not load in time.")
         except NoSuchElementException:
-            print(f"❌ Page {page_number} button not found.")
+            print(f"Page {page_number} button not found.")
 
     def set_quantity(self, quantity):
         """Set the quantity of the selected product."""
@@ -70,9 +70,9 @@ class StorePage(BasePage):
             )
             quantity_input.clear()
             quantity_input.send_keys(str(quantity))
-            print(f"✅ Quantity set to {quantity}")
+            print(f"Quantity set to {quantity}")
         except TimeoutException:
-            print("❌ Timeout: Quantity input field not found.")
+            print("Timeout: Quantity input field not found.")
 
     def add_to_cart(self):
         """Click the 'Add to Cart' button."""
@@ -81,9 +81,9 @@ class StorePage(BasePage):
             WebDriverWait(self.driver, 5).until(
                 EC.presence_of_element_located(self.SUCCESS_MESSAGE)
             )
-            print("✅ Item successfully added to cart.")
+            print("Item successfully added to cart.")
         except Exception as e:
-            print("❌ Error: Unable to click 'Add to Cart' button.", e)
+            print("Error: Unable to click 'Add to Cart' button.", e)
 
     # **Cart Methods**
     def open_cart(self):
@@ -113,12 +113,12 @@ class StorePage(BasePage):
                     if product.text.strip().lower() == product_name.lower():
                         product.click()
                         found = True
-                        print(f"✅ Found and selected {product_name} on page {page}")
+                        print(f"Found and selected {product_name} on page {page}")
                         break
                 if found:
                     break
             except NoSuchElementException:
-                print(f"❌ Product '{product_name}' not found on page {page}.")
+                print(f"Product '{product_name}' not found on page {page}.")
         if not found:
             raise Exception(f"Product '{product_name}' not found after checking all pages.")
 

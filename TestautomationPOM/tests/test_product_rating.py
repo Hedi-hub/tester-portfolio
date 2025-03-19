@@ -37,7 +37,7 @@ class TestProductRating:
 
         # Buy a product
         store_page.go_to_shop()
-        store_page.select_product("Oranges")
+        store_page.select_product("Gala Apples")
         store_page.set_quantity(1)
         store_page.add_to_cart()
         store_page.open_cart()
@@ -72,7 +72,7 @@ class TestProductRating:
 
         # Buy a product
         store_page.go_to_shop()
-        store_page.select_product("Oranges")
+        store_page.select_product("Gala Apples")
         store_page.set_quantity(1)
         store_page.add_to_cart()
         store_page.open_cart()
@@ -84,7 +84,7 @@ class TestProductRating:
         assert checkout_page.is_order_successful(), "Order was not completed successfully."
 
         # Submit a profane review
-        profane_text = "This is f***ing terrible!"
+        profane_text = "This is fucking terrible!"
         rating_page.rate_product(1, profane_text)
         time.sleep(2)  # Wait for review processing
 

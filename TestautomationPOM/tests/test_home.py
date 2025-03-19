@@ -12,7 +12,7 @@ def test_search_product(driver):
     home_page = HomePage(driver)
 
     # Search for 'Oranges'
-    result_text = home_page.search_product("Oranges")
+    result_text = home_page.search_product("Gala Apples")
 
     # Wait for the search suggestion containing 'Oranges' to appear
     suggestion_xpath = "//div[@class='suggestion-item']/p/strong[text()='Oranges']"
@@ -21,7 +21,7 @@ def test_search_product(driver):
     )
 
     # Assert that the search suggestion contains 'Oranges'
-    assert "Oranges" in result_text, "Search suggestion did not return expected product"
+    assert "Gala Apples" in result_text, "Search suggestion did not return expected product"
 
     # Click on 'Oranges' using JavaScript (to avoid interaction issues)
     driver.execute_script("arguments[0].click();", oranges_suggestion)
@@ -32,4 +32,4 @@ def test_search_product(driver):
         EC.visibility_of_element_located((By.XPATH, product_title_xpath))
     ).text
 
-    assert "Oranges" in product_title, f"Failed to navigate to the correct product page. Found: {product_title}"
+    assert "Gala Apples" in product_title, f"Failed to navigate to the correct product page. Found: {product_title}"
