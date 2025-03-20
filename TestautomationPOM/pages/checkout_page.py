@@ -33,22 +33,22 @@ class CheckoutPage(BasePage):
         super().__init__(driver)
         self.driver.get(CHECKOUT_PAGE_URL)
 
-    def fill_shipping_details(self):
-        """ Fill in shipping address details using constants """
-        self.enter_text(self.STREET_ADDRESS, DEFAULT_STREET_ADDRESS)
-        self.enter_text(self.CITY, DEFAULT_CITY)
-        self.enter_text(self.POSTAL_CODE, DEFAULT_POSTAL_CODE)
+    def fill_shipping_details(self, street, city, postal_code):
+        """ Fill in shipping address details dynamically """
+        WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable(self.STREET_ADDRESS)).send_keys(street)
+        WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable(self.CITY)).send_keys(city)
+        WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable(self.POSTAL_CODE)).send_keys(postal_code)
 
-    def fill_payment_details(self):
-        """ Fill in payment details using constants """
-        self.enter_text(self.CARD_NUMBER, DEFAULT_CARD_NUMBER)
-        self.enter_text(self.NAME_ON_CARD, DEFAULT_NAME_ON_CARD)
-        self.enter_text(self.EXPIRATION, DEFAULT_EXPIRATION)
-        self.enter_text(self.CVV, DEFAULT_CVV)
+    def fill_payment_details(self, card_number, name_on_card, expiration, cvv):
+        """ Fill in payment details dynamically """
+        WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable(self.CARD_NUMBER)).send_keys(card_number)
+        WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable(self.NAME_ON_CARD)).send_keys(name_on_card)
+        WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable(self.EXPIRATION)).send_keys(expiration)
+        WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable(self.CVV)).send_keys(cvv)
 
     def complete_purchase(self):
         """ Click the Buy Now button """
-        self.click(self.BUY_NOW_BUTTON)
+        WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable(self.BUY_NOW_BUTTON)).click()
 
     def is_order_successful(self):
         """ Check if order was successful by verifying redirection to Home Page """

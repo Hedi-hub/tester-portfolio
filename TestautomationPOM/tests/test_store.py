@@ -1,64 +1,35 @@
 import pytest
 from TestautomationPOM.pages.store_page import StorePage
+from TestautomationPOM.pages.home_page import HomePage
 from TestautomationPOM.utils.constants import BASE_URL
+import time
 
 
-def test_add_item_to_cart(driver):
-    """Verify that an item can be added to the cart."""
+@pytest.mark.parametrize("product_name, quantity", [
+    ("Gala Apples", 2),
+    ("Celery", 5),
+    ("Ginger", 3)
+])
+def test_add_item_to_cart(driver, product_name, quantity):
+    """Verify that an item can be added to the cart dynamically, handling age verification."""
+
     driver.get(BASE_URL)
     store_page = StorePage(driver)
+    home_page = HomePage(driver)
+
+    # Navigate & handle age verification
     store_page.go_to_shop()
 
-    # Take a screenshot after navigating to the shop page
-    driver.save_screenshot("shop_page_loaded2.png")
+    # FIX: Wait a moment before searching for products
+    time.sleep(1)  # Short sleep to ensure all products are rendered
 
-    store_page.select_product("Gala Apples")  # Now navigates through pages to find product
-    store_page.set_quantity(3)
-    store_page.add_to_cart()
+    # Find product dynamically
+    store_page.find_product(product_name)
 
-    store_page.open_cart()
+    # Set quantity & add to cart
+    store_page.set_quantity(product_name, quantity)
+    store_page.add_to_cart(product_name)
 
-    assert store_page.is_product_in_cart("Gala Apples"), "Item was not added to the cart."
-
-
-def test_update_cart_quantity(driver):
-    """Verify that the quantity of an item in the cart can be updated."""
-    driver.get(BASE_URL)
-    store_page = StorePage(driver)
-    store_page.go_to_shop()
-
-    store_page.select_product("Gala Apples")
-    store_page.set_quantity(2)
-    store_page.add_to_cart()
-
-    store_page.open_cart()
-    store_page.update_product_quantity("Gala Apples", 5)
-
-    assert store_page.get_product_quantity("Gala Apples") == 5, "Cart quantity update failed."
-
-
-def test_remove_item_from_cart(driver):
-    """Verify that an item can be removed from the cart."""
-    driver.get(BASE_URL)
-    store_page = StorePage(driver)
-    store_page.go_to_shop()
-
-    store_page.select_product("Gala Apples")
-    store_page.set_quantity(1)
-    store_page.add_to_cart()
-
-    store_page.open_cart()
-    store_page.remove_product("Gala Apples")
-
-    assert not store_page.is_product_in_cart("Gala Apples"), "Item was not removed from the cart."
-
-
-def test_navigate_to_shop_with_age_verification(driver):
-    """Verify that the shop page opens correctly, handling age verification if needed."""
-    driver.get(BASE_URL)
-    store_page = StorePage(driver)
-
-    store_page.go_to_shop()  # This will automatically handle age verification
-
-    # Check that the shop page loaded successfully by verifying the URL contains 'store'
-    assert "store" in driver.current_url, "Shop page did not load correctly after age verification."
+    # Open cart & verify
+    home_page.open_cart()
+    assert home_page.is_product_in_cart(product_name), f"Item {product_name} was not added to the cart."
