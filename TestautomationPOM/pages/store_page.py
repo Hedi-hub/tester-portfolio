@@ -56,14 +56,6 @@ class StorePage(BasePage):
             self.driver.save_screenshot("store_page_error.png")
             raise
 
-    from selenium.webdriver.common.by import By
-    from selenium.webdriver.support.ui import WebDriverWait
-    from selenium.webdriver.support import expected_conditions as EC
-
-    from selenium.webdriver.common.by import By
-    from selenium.webdriver.support.ui import WebDriverWait
-    from selenium.webdriver.support import expected_conditions as EC
-
     def handle_age_verification(self):
         """Handles the age verification modal if it appears."""
         try:
@@ -129,7 +121,8 @@ class StorePage(BasePage):
     def set_quantity(self, product_name, quantity):
         """Sets the quantity for a specific product"""
         quantity_input = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((By.XPATH, f"//h2[contains(text(), '{product_name}')]/ancestor::div[contains(@class, 'product-card')]//input[@type='number']"))
+            EC.element_to_be_clickable((By.XPATH,
+                                        f"//h2[contains(text(), '{product_name}')]/ancestor::div[contains(@class, 'product-card')]//input[@type='number']"))
         )
         quantity_input.clear()
         quantity_input.send_keys(str(quantity))
@@ -137,6 +130,7 @@ class StorePage(BasePage):
     def add_to_cart(self, product_name):
         """Clicks the Add to Cart button for a specific product"""
         add_to_cart_button = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((By.XPATH, f"//h2[contains(text(), '{product_name}')]/ancestor::div[contains(@class, 'product-card')]//button[contains(text(), 'Add to Cart')]"))
+            EC.element_to_be_clickable((By.XPATH,
+                                        f"//h2[contains(text(), '{product_name}')]/ancestor::div[contains(@class, 'product-card')]//button[contains(text(), 'Add to Cart')]"))
         )
         add_to_cart_button.click()
