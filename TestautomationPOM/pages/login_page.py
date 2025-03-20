@@ -1,5 +1,6 @@
 from selenium.webdriver.common.by import By
 from TestautomationPOM.pages.base_page import BasePage
+from TestautomationPOM.pages.home_page import HomePage
 from TestautomationPOM.utils.constants import LOGIN_URL
 
 
@@ -33,6 +34,7 @@ class LoginPage(BasePage):
         self.enter_email(email)
         self.enter_password(password)
         self.click_login()
+        return HomePage(self.driver)
 
     def is_logged_in(self):
         """ Check if login was successful by verifying the presence of the profile icon """

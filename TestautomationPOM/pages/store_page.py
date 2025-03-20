@@ -19,42 +19,7 @@ class StorePage(BasePage):
     SHOP_BUTTON = (By.XPATH, "//a[@href='/store']")  # XPath for the Shop button
     PRODUCT_CONTAINER = (By.CLASS_NAME, "product-store-container")  # A store-specific element
 
-    def go_to_shop(self):
-        """Navigates to the store page by clicking the Shop button if necessary."""
 
-        # Handle age verification first
-        self.handle_age_verification()
-
-        try:
-            # ✅ If we are NOT already on the store page, click the Shop button
-            if "/store" not in self.driver.current_url:
-                print("🔹 Clicking on 'Shop' button to go to store...")
-                WebDriverWait(self.driver, 10).until(
-                    EC.element_to_be_clickable((By.XPATH, "//a[@href='/store']"))
-                ).click()
-
-            # ✅ Wait for store page URL
-            WebDriverWait(self.driver, 10).until(
-                EC.url_contains("/store")
-            )
-            print("✅ Store page URL loaded.")
-
-            # ✅ Wait for the product grid to appear
-            WebDriverWait(self.driver, 10).until(
-                EC.visibility_of_element_located((By.CLASS_NAME, "product-store-container"))
-            )
-            print("✅ Store page fully loaded.")
-
-            # ✅ NEW: Wait for at least one product to be visible
-            WebDriverWait(self.driver, 10).until(
-                EC.visibility_of_element_located((By.XPATH, "//h2[contains(text(), 'Gala Apples')]"))
-            )
-            print("✅ Products are visible.")
-
-        except TimeoutException:
-            print("❌ ERROR: Store page or products did NOT load! Taking screenshot...")
-            self.driver.save_screenshot("store_page_error.png")
-            raise
 
     def handle_age_verification(self):
         """Handles the age verification modal if it appears."""
@@ -63,10 +28,10 @@ class StorePage(BasePage):
 
             # ✅ Wait up to 5 seconds to check if the modal appears
             modal = WebDriverWait(self.driver, 5).until(
-                EC.visibility_of_element_located((By.XPATH, "//div[contains(text(), 'Age Verification')]"))
+                EC.visibility_of_element_located((By.XPATH, "//h2[contains(text(), 'Age Verification')]"))
             )
             print("🔹 Age verification required. Entering birthdate...")
-
+            #TODO FIX INPUT FOR AGE, MAKE SURE YOU CAN ENTER ABOVE AND BELOW 16 DONT MAKE IT STATIC
             # ✅ Enter a valid birthdate
             birthdate_input = self.driver.find_element(By.XPATH, "//input[@type='text']")
             birthdate_input.send_keys("01-01-1990")  # Use a valid format
@@ -92,7 +57,7 @@ class StorePage(BasePage):
             return WebDriverWait(self.driver, 10).until(
                 EC.presence_of_element_located(
                     (By.XPATH,
-                     f"//h2[contains(translate(text(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), '{product_name.lower()}')]")
+                     f"//p[contains(translate(text(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), '{product_name.lower()}')]")
                 )
             )
         except TimeoutException:
@@ -122,7 +87,7 @@ class StorePage(BasePage):
         """Sets the quantity for a specific product"""
         quantity_input = WebDriverWait(self.driver, 10).until(
             EC.element_to_be_clickable((By.XPATH,
-                                        f"//h2[contains(text(), '{product_name}')]/ancestor::div[contains(@class, 'product-card')]//input[@type='number']"))
+                                        f"//p[contains(text(), '{product_name}')]/ancestor::div[contains(@class, 'product-card')]//input[@type='number']"))
         )
         quantity_input.clear()
         quantity_input.send_keys(str(quantity))
@@ -131,6 +96,6 @@ class StorePage(BasePage):
         """Clicks the Add to Cart button for a specific product"""
         add_to_cart_button = WebDriverWait(self.driver, 10).until(
             EC.element_to_be_clickable((By.XPATH,
-                                        f"//h2[contains(text(), '{product_name}')]/ancestor::div[contains(@class, 'product-card')]//button[contains(text(), 'Add to Cart')]"))
+                                        f"//p[contains(text(), '{product_name}')]/ancestor::div[contains(@class, 'product-card')]//button[contains(text(), 'Add to Cart')]"))
         )
         add_to_cart_button.click()
