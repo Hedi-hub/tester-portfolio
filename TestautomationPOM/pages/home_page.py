@@ -4,18 +4,17 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from TestautomationPOM.pages.base_page import BasePage
 from TestautomationPOM.pages.store_page import StorePage
-
 from TestautomationPOM.utils.constants import HOME_PAGE_URL
 
 
 class HomePage(BasePage):
     """Handles home page functionalities like searching and navigating to cart."""
 
-    CART_ICON = (By.CLASS_NAME, "headerIcon")
+    CART_ICON = (By.XPATH, "//div[@class='headerIcon'][3]")
 
     def __init__(self, driver):
         super().__init__(driver)
-        self.driverdriver = None
+        self.driver = None
 
     def go_to_shop(self):
         """Navigates to the store page by clicking the Shop button if necessary."""
@@ -28,7 +27,6 @@ class HomePage(BasePage):
                 WebDriverWait(self.driver, 10).until(
                     EC.element_to_be_clickable((By.XPATH, "//a[@href='/store']"))
                 ).click()
-
 
             # ✅ Wait for store page URL
             WebDriverWait(self.driver, 10).until(
@@ -45,7 +43,7 @@ class HomePage(BasePage):
 
             # ✅ NEW: Wait for at least one product to be visible
             WebDriverWait(self.driver, 10).until(
-                EC.visibility_of_element_located((By.XPATH, "//p[contains(text(), 'Gala Apples')]"))
+                EC.visibility_of_element_located((By.XPATH, '//p[contains(text(), \'Gala Apples\')]'))
             )
             print("✅ Products are visible.")
 
@@ -61,12 +59,15 @@ class HomePage(BasePage):
         self.click(self.CART_ICON)
 
     def is_product_in_cart(self, product_name):
-        """Check if a product is in the cart by verifying its name appears in the cart page."""
+        """Check if a product name appears in the cart."""
         try:
             WebDriverWait(self.driver, 10).until(
-                EC.presence_of_element_located((By.XPATH, f"//td[contains(text(), '{product_name}')]"))
+                EC.presence_of_element_located(
+                    (By.XPATH,
+                     f"//h5[@class, 'checkout-product-title' and contains(text(), '{product_name}')]")
+                )
             )
             return True
         except (TimeoutException, NoSuchElementException):
-            print(f"Product '{product_name}' was NOT found in the cart.")
+            print(f"Product '{product_name}' not in cart!")
             return False
