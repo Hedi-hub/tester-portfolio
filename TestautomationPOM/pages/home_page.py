@@ -14,7 +14,6 @@ class HomePage(BasePage):
 
     def __init__(self, driver):
         super().__init__(driver)
-        self.driver = None
 
     def go_to_shop(self):
         """Navigates to the store page by clicking the Shop button if necessary."""
@@ -64,7 +63,7 @@ class HomePage(BasePage):
             WebDriverWait(self.driver, 10).until(
                 EC.presence_of_element_located(
                     (By.XPATH,
-                     f"//h5[@class, 'checkout-product-title' and contains(text(), '{product_name}')]")
+                     f"//h5[@class='checkout-product-title' and contains(text(), '{product_name}')]")
                 )
             )
             return True
