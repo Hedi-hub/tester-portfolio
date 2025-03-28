@@ -6,5 +6,6 @@ def generate_unique_email():
     timestamp = int(time.time())  # Get current timestamp
     return f"testuser_{timestamp}@example.com"
 
+
 def format_date(day, month, year):
     return f"{str(day).zfill(2)}-{str(month).zfill(2)}-{str(year)}"
