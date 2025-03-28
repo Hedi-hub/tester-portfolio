@@ -4,7 +4,6 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException, NoSuchElementException
 from TestautomationPOM.pages.base_page import BasePage
 from TestautomationPOM.utils.constants import SHOP_PAGE_URL
-from datetime import datetime, timedelta
 
 
 class StorePage(BasePage):

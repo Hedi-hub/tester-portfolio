@@ -11,6 +11,7 @@ class HomePage(BasePage):
     """Handles home page functionalities like searching and navigating to cart."""
 
     CART_ICON = (By.XPATH, "//div[@class='headerIcon'][3]")
+    SEARCH_INPUT = (By.XPATH, "//input[@placeholder='Search Products']")
 
     def __init__(self, driver):
         super().__init__(driver)
@@ -56,6 +57,18 @@ class HomePage(BasePage):
     def open_cart(self):
         """Click the cart icon to navigate to the cart page."""
         self.click(self.CART_ICON)
+
+    def search_product(self, product_name):
+        """Search for a product and return the suggestion text"""
+
+        SUGGESTION_ITEM = (By.XPATH, f"//div[@class='suggestion-item']/p/strong[text()='{product_name}']")
+
+        self.enter_text(self.SEARCH_INPUT, product_name)
+
+        suggestion = WebDriverWait(self.driver, 10).until(
+            EC.visibility_of_element_located(SUGGESTION_ITEM)
+        )
+        return suggestion.text
 
     def is_product_in_cart(self, product_name):
         """Check if a product name appears in the cart."""
