@@ -7,7 +7,7 @@ from TestautomationPOM.utils.constants import BASE_URL
 @pytest.mark.parametrize("day, month, year, expected_message", [
     (1, 1, 2010, "You are underage"),   # Underage access denied
     (1, 1, 2000, "You are of age"),     # Access granted at 18+
-    (None, None, None, "You are underage"),           # No birthdate provided
+    (None, None, None, "You are underage"),  # No birthdate provided
 ])
 def test_age_verification(driver, day, month, year, expected_message):
     driver.get(BASE_URL)

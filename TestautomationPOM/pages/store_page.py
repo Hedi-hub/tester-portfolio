@@ -1,3 +1,5 @@
+import time
+
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -74,7 +76,7 @@ class StorePage(BasePage):
                     (By.XPATH, f"//p[@class='lead' and contains(text(), '{product_name}')]")
                 )
             )
-            print(f"Product found: {product_name}")
+            print(f"Product found: {product.text}")
             return product
         except TimeoutException:
             print(f"ERROR: Product '{product_name}' NOT found!")
@@ -87,8 +89,9 @@ class StorePage(BasePage):
 
     def find_and_click_product(self, product_name):
         """Finds and clicks the product (if necessary)"""
-        self.find_product(product_name)
-        self.select_product(product_name)
+        product = self.find_product(product_name)
+        time.sleep(2)
+        product.click()
 
     def get_quantity_input(self, product_name):
         """Finds the quantity input field for a specific product"""

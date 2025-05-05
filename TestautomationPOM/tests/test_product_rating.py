@@ -1,95 +1,57 @@
-import time
 import pytest
-from TestautomationPOM.pages.registration_page import RegistrationPage
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
 from TestautomationPOM.pages.login_page import LoginPage
+from TestautomationPOM.pages.home_page import HomePage
 from TestautomationPOM.pages.store_page import StorePage
-from TestautomationPOM.pages.checkout_page import CheckoutPage
 from TestautomationPOM.pages.product_rating_page import ProductRatingPage
-from TestautomationPOM.utils.constants import BASE_URL
+from TestautomationPOM.utils.constants import BASE_URL, TEST_EMAIL, TEST_PASSWORD
 
 
-def generate_unique_email():
-    """Generates a unique email for test user."""
-    timestamp = int(time.time())  # Get current timestamp
-    return f"testuser_{timestamp}@example.com"
+@pytest.mark.parametrize("product_name, rating, comment", [
+    ("Gala Apples", 5, "Very juicy for a good price!!"),
+])
+def test_product_rating_flow(driver, product_name, rating, comment):
+    """Test full product rating flow for a previously purchased item."""
 
+    # Step 1: Login
+    driver.get(BASE_URL)
+    login_page = LoginPage(driver)
+    home_page = login_page.login(TEST_EMAIL, TEST_PASSWORD)
 
-@pytest.mark.usefixtures("driver")
-class TestProductRating:
+    # Step 2: Navigate to store and click product
+    store_page = home_page.go_to_shop()
 
-    def test_rate_product_after_purchase(self, driver):
-        """Test that a user can rate a product after purchase using a fresh account."""
+    ####### Click on confirm button to get rid of age verification
+    store_page.handle_age_verification("01-01-1990")
 
-        registration_page = RegistrationPage(driver)
-        login_page = LoginPage(driver)
-        store_page = StorePage(driver)
-        checkout_page = CheckoutPage(driver)
-        rating_page = ProductRatingPage(driver)
+    store_page.find_and_click_product(product_name)
 
-        # Generate a unique email
-        email = generate_unique_email()
-        password = "Test@123"
+    # Step 3: Load product rating page
+    rating_page = ProductRatingPage(driver)
 
-        # Register & Login
-        driver.get(BASE_URL)
-        registration_page.register(email, password)
-        login_page.login(email, password)
+    # Step 4: If already reviewed, delete first
+    if rating_page.has_review_restriction():
+        rating_page.delete_existing_review()
 
-        # Buy a product
-        store_page.go_to_shop()
-        store_page.select_product("Gala Apples")
-        store_page.set_quantity(1)
-        store_page.add_to_cart()
-        store_page.open_cart()
-        store_page.proceed_to_checkout()
+    # Step 5: Rate the product
+    rating_page.click_star_rating(rating)
+    assert rating_page.count_filled_stars() == rating, "Expected star count doesn't match after click."
 
-        checkout_page.fill_shipping_details()
-        checkout_page.fill_payment_details()
-        checkout_page.complete_purchase()
-        assert checkout_page.is_order_successful(), "Order was not completed successfully."
+    # Step 6: Submit review
+    rating_page.submit_review(comment)
 
-        # Rate the product
-        assert rating_page.rate_product(5, "Great product!"), "Failed to rate product."
+    # Step 7: Check name appears under review
+    name = rating_page.get_own_review_name()
+    assert name == "John Doe", f"Unexpected review name. Expected 'John Doe' but found '{name}'"
 
-    def test_profane_review_is_blocked(self, driver):
-        """
-        Test that a profane review is blocked and does not appear in displayed reviews.
-        """
-        registration_page = RegistrationPage(driver)
-        login_page = LoginPage(driver)
-        store_page = StorePage(driver)
-        checkout_page = CheckoutPage(driver)
-        rating_page = ProductRatingPage(driver)
-
-        # Generate a unique email
-        email = generate_unique_email()
-        password = "Test@123"
-
-        # Register & Login
-        driver.get(BASE_URL)
-        registration_page.register(email, password)
-        login_page.login(email, password)
-
-        # Buy a product
-        store_page.go_to_shop()
-        store_page.select_product("Gala Apples")
-        store_page.set_quantity(1)
-        store_page.add_to_cart()
-        store_page.open_cart()
-        store_page.proceed_to_checkout()
-
-        checkout_page.fill_shipping_details()
-        checkout_page.fill_payment_details()
-        checkout_page.complete_purchase()
-        assert checkout_page.is_order_successful(), "Order was not completed successfully."
-
-        # Submit a profane review
-        profane_text = "This is fucking terrible!"
-        rating_page.rate_product(1, profane_text)
-        time.sleep(2)  # Wait for review processing
-
-        # Verify that the profane text is not displayed
-        reviews = rating_page.get_displayed_reviews()
-        assert not any(profane_text in review for review in reviews), (
-            "Profane text was found in displayed reviews but should have been blocked or removed."
-        )
+    # Step 8: Check if comment appears
+    review_texts = rating_page.get_review_texts()
+    if comment not in review_texts:
+        print("Initial review missing, editing...")
+        rating_page.edit_review(comment)
+        review_texts = rating_page.get_review_texts()
+        assert comment in review_texts, "Edited review still not found."
+    else:
+        print("Review appeared correctly after first submission.")

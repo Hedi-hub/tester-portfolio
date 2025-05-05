@@ -6,88 +6,83 @@ from TestautomationPOM.pages.base_page import BasePage
 
 
 class ProductRatingPage(BasePage):
-    """Handles product rating and review"""
+    """Handles product rating and review functionality."""
 
-    # **Locators**
-    RATING_SECTION = (By.CLASS_NAME, "ratingContainer")
-    INTERACTIVE_RATING = (By.CLASS_NAME, "interactive-rating")
-    STARS = (By.CLASS_NAME, "star")
-    REVIEW_TEXTAREA = (By.CLASS_NAME, "new-review-form-control")
-    SUBMIT_REVIEW_BUTTON = (By.CLASS_NAME, "new-review-btn-send")
+    # --- Locators ---
     REVIEW_RESTRICTION = (By.CLASS_NAME, "reviewRestriction")
-    MENU_ICON = (By.CLASS_NAME, "menu-icon")  # To open dropdown
+    STAR_FILLED = (By.CSS_SELECTOR, "span.star.filled")
+    STARS = (By.CSS_SELECTOR, "span.star")
+    COMMENT_INPUT = (By.CLASS_NAME, "new-review-form-control")
+    SUBMIT_BUTTON = (By.CLASS_NAME, "new-review-btn-send")
+    COMMENT_AUTHOR = (By.CSS_SELECTOR, "div.comment h5")  # Just for you name check
+    COMMENT_TEXT = (By.CSS_SELECTOR, "div.comment-footer")
+    MENU_ICON = (By.CLASS_NAME, "menu-icon")
+    EDIT_BUTTON = (By.XPATH, "//button[text()='Edit']")
     DELETE_BUTTON = (By.XPATH, "//button[text()='Delete']")
+    EDIT_INPUT = (By.CSS_SELECTOR, "div.modal textarea")
+    SAVE_EDIT_BUTTON = (By.XPATH, "//button[text()='Save Changes']")
 
-    COMMENT_BLOCKS = (By.CSS_SELECTOR, "div.comment")
-    COMMENT_FOOTER = (By.CSS_SELECTOR, "div.comment-footer")
-
-    def rate_product(self, rating: int, comment: str) -> bool:
-        """Rates a product and submits a review"""
-
-        # Check if user has already rated the product
+    def has_review_restriction(self):
+        """Checks if the 'already reviewed' restriction message appears."""
         try:
-            restriction_message = self.find_element(self.REVIEW_RESTRICTION)
-            if restriction_message:
-                print("User has already reviewed this product. Attempting to delete and re-rate...")
-                self.delete_existing_review()
+            return self.find_element(self.REVIEW_RESTRICTION).is_displayed()
         except NoSuchElementException:
-            pass  # No previous review found, proceed with rating
+            return False
 
-        # Click on the star rating
+    def click_star_rating(self, rating):
+        """Clicks on the given star (1-5) to rate."""
         stars = self.find_elements(self.STARS)
         if 1 <= rating <= len(stars):
             stars[rating - 1].click()
         else:
-            print("Invalid rating value. Should be between 1 and 5.")
-            return False
+            print("Invalid rating.")
 
-        # Enter review comment
-        self.enter_text(self.REVIEW_TEXTAREA, comment)
-
-        # Submit the review
-        self.click(self.SUBMIT_REVIEW_BUTTON)
-
-        # Verify submission success
+    def count_filled_stars(self):
+        """Returns the number of filled stars after selection."""
         try:
-            WebDriverWait(self.driver, 5).until(
-                EC.presence_of_element_located(self.REVIEW_RESTRICTION)
-            )
-            return True  # Successfully submitted
-        except TimeoutException:
-            print("Review submission might have failed.")
-            return False
+            filled = self.find_elements(self.STAR_FILLED)
+            return len(filled)
+        except Exception:
+            return 0
+
+    def submit_review(self, text):
+        """Submits a new review."""
+        self.enter_text(self.COMMENT_INPUT, text)
+        self.click(self.SUBMIT_BUTTON)
+
+    def get_own_review_name(self):
+        """Returns the name attached to the most recent review."""
+        try:
+            return self.find_element(self.COMMENT_AUTHOR).text.strip()
+        except Exception:
+            return None
+
+    def get_review_texts(self):
+        """Returns all review texts."""
+        try:
+            comments = self.find_elements(self.COMMENT_TEXT)
+            return [c.text.strip() for c in comments]
+        except Exception:
+            return []
+
+    def edit_review(self, new_text):
+        """Edits an existing review."""
+        try:
+            self.click(self.MENU_ICON)
+            self.click(self.EDIT_BUTTON)
+            self.enter_text(self.EDIT_INPUT, new_text)
+            self.click(self.SAVE_EDIT_BUTTON)
+        except Exception as e:
+            print(f"Editing review failed: {e}")
 
     def delete_existing_review(self):
-        """Deletes an existing review if found"""
+        """Deletes an existing review if restriction is active."""
         try:
-            # Open the menu dropdown
             self.click(self.MENU_ICON)
-
-            # Click delete button
             self.click(self.DELETE_BUTTON)
-
-            # Wait for the review section to update
             WebDriverWait(self.driver, 5).until(
                 EC.invisibility_of_element_located(self.REVIEW_RESTRICTION)
             )
-            print("Existing review deleted successfully.")
+            print("✅ Existing review deleted.")
         except (NoSuchElementException, TimeoutException):
-            print("Failed to delete existing review.")
-
-    def get_displayed_reviews(self):
-        """Returns a list of the text from each review's <div class='comment-footer'>."""
-        reviews = []
-        try:
-            # Wait for at least one comment block to appear
-            WebDriverWait(self.driver, 5).until(
-                EC.presence_of_all_elements_located(self.COMMENT_BLOCKS)
-            )
-            comment_divs = self.find_elements(self.COMMENT_BLOCKS)
-
-            for div in comment_divs:
-                # Inside each comment block, find the footer text
-                footer_div = div.find_element(*self.COMMENT_FOOTER)
-                reviews.append(footer_div.text.strip())
-        except TimeoutException:
-            print("No reviews found or they didn't load in time.")
-        return reviews
+            print("⚠️ No review to delete or deletion failed.")
