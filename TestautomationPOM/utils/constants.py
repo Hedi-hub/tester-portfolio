@@ -13,9 +13,9 @@ LOGIN_URL = BASE_URL + "/auth"
 REGISTER_URL = BASE_URL + "/auth"
 
 # Test Credentials
-TEST_USERNAME = "John Doe"
-TEST_PASSWORD = "admin123"
-TEST_EMAIL = "johndoe@example.com"
+TEST_USERNAME = "John Doe Ex"
+TEST_PASSWORD = "M@rketM@te25"
+TEST_EMAIL = "johndoe@example1.com"
 
 # Checkout Page Constants
 DEFAULT_STREET_ADDRESS = "123 Main Street"

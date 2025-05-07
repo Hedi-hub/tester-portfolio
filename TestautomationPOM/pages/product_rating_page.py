@@ -1,7 +1,7 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import TimeoutException, NoSuchElementException
+from selenium.common.exceptions import TimeoutException, NoSuchElementException, NoAlertPresentException
 from TestautomationPOM.pages.base_page import BasePage
 
 
@@ -9,24 +9,30 @@ class ProductRatingPage(BasePage):
     """Handles product rating and review functionality."""
 
     # --- Locators ---
-    REVIEW_RESTRICTION = (By.CLASS_NAME, "reviewRestriction")
+    REVIEW_RESTRICTION = (By.XPATH, "//p[text()='You have already reviewed this product.']")
     STAR_FILLED = (By.CSS_SELECTOR, "span.star.filled")
-    STARS = (By.CSS_SELECTOR, "span.star")
+    STARS = (By.XPATH, "//div[@class='interactive-rating']//span")
     COMMENT_INPUT = (By.CLASS_NAME, "new-review-form-control")
     SUBMIT_BUTTON = (By.CLASS_NAME, "new-review-btn-send")
-    COMMENT_AUTHOR = (By.CSS_SELECTOR, "div.comment h5")  # Just for you name check
+    COMMENT_AUTHOR = (By.XPATH, "//div[@class='comments-container']//div[@class='comment'][1]//strong")  # Just for you name check
     COMMENT_TEXT = (By.CSS_SELECTOR, "div.comment-footer")
-    MENU_ICON = (By.CLASS_NAME, "menu-icon")
-    EDIT_BUTTON = (By.XPATH, "//button[text()='Edit']")
-    DELETE_BUTTON = (By.XPATH, "//button[text()='Delete']")
+    MENU_ICON = (By.XPATH, "//div[@class='menu-icon']")
+    EDIT_BUTTON = (By.XPATH, "//div[@class='dropdown-menu']/button[text()='Edit']")
+    DELETE_BUTTON = (By.XPATH, "//div[@class='dropdown-menu']/button[text()='Delete']")
     EDIT_INPUT = (By.CSS_SELECTOR, "div.modal textarea")
     SAVE_EDIT_BUTTON = (By.XPATH, "//button[text()='Save Changes']")
+    DROPDOWN_MENU = (By.XPATH, "//div[@class='dropdown-menu']")
 
     def has_review_restriction(self):
         """Checks if the 'already reviewed' restriction message appears."""
         try:
-            return self.find_element(self.REVIEW_RESTRICTION).is_displayed()
-        except NoSuchElementException:
+            # Wait until the element is visible
+            element = WebDriverWait(self.driver, self.timeout).until(
+                EC.visibility_of_element_located(self.REVIEW_RESTRICTION)
+            )
+            return element.is_displayed()
+        except TimeoutException:
+            # If element is not found, return False, meaning no restriction
             return False
 
     def click_star_rating(self, rating):
@@ -79,9 +85,22 @@ class ProductRatingPage(BasePage):
         """Deletes an existing review if restriction is active."""
         try:
             self.click(self.MENU_ICON)
-            self.click(self.DELETE_BUTTON)
-            WebDriverWait(self.driver, 5).until(
-                EC.invisibility_of_element_located(self.REVIEW_RESTRICTION)
+            dropdown_menu = self.find_element(self.DROPDOWN_MENU)
+            if dropdown_menu.is_displayed():
+                print("✅ Dropdown Menu is displayed")
+                self.click(self.DELETE_BUTTON)
+                # Handle the confirmation alert
+                try:
+                    WebDriverWait(self.driver, 5).until(EC.alert_is_present())
+                    alert = self.driver.switch_to.alert
+                    print(f"⚠️ Alert Text: {alert.text}")
+                    alert.accept()  # Accept the alert (click "OK")
+                    print("✅ Alert accepted.")
+                except NoAlertPresentException:
+                    print("⚠️ No alert present when expected.")
+
+            WebDriverWait(self.driver, 10).until(
+                        EC.invisibility_of_element_located(self.REVIEW_RESTRICTION)
             )
             print("✅ Existing review deleted.")
         except (NoSuchElementException, TimeoutException):
